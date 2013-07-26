@@ -8,18 +8,20 @@
          window.onload = function() {
 
             var wsuri;
+            var port = 8888;
             ellog = document.getElementById('log');
 
-            /*if (window.location.protocol === "file:") {
-               wsuri = "ws://localhost:9000";
+            if (window.location.protocol === "file:") {
+               wsuri = "ws://localhost:" + port;
             } else {
-               wsuri = "ws://" + window.location.hostname + ":9000";
-            }*/
-            wsuri = "ws://127.0.0.1:8080";
+               wsuri = "ws://" + window.location.hostname + ":" + port;
+            }
 
             if ("WebSocket" in window) {
+               log("WebSocket found")
                sock = new WebSocket(wsuri);
             } else if ("MozWebSocket" in window) {
+               log("MozWebSocket found")
                sock = new MozWebSocket(wsuri);
             } else {
                log("Browser does not support WebSocket!");
