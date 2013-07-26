@@ -3,6 +3,8 @@ import sys
 from autobahn.websocket import WebSocketServerProtocol, WebSocketServerFactory, listenWS
 from twisted.internet import reactor
 
+from lobby import Lobby
+
 class ClientConnection(WebSocketServerProtocol):
 	def onOpen(self):
 		self.factory.register(self)
@@ -20,9 +22,11 @@ class Server(WebSocketServerFactory):
 	def __init__(self, url, debug = False, debugCodePaths = False):
 		WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
 		self.clients = []
+		self.gameLobby = None
 
 	def processMessage(self, client, message):
-		print "Received message from {client}: {message}".format(client=client.peerstr, message=message)
+		# print "Received message from {client}: {message}".format(client=client.peerstr, message=message)
+		self.gameLobby.processMessage(client, message)
 
 	def register(self, client):
 		if not client in self.clients:
@@ -54,8 +58,11 @@ def main():
 	factory = Server("ws://{host}:{port}".format(host=host, port=port))
 	factory.protocol = ClientConnection
 	factory.setProtocolOptions(allowHixie76=True)
+
+	lobby = Lobby(factory)
+	factory.gameLobby = lobby
+
 	listenWS(factory, interface=host)
-	# listenWS(factory)
 	reactor.run()
 
 
