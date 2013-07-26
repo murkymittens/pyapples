@@ -15,7 +15,7 @@ class Lobby(object):
 		player.session_id = session_id
 		self.players[session_id] = player
 
-		message = Message.encode(Message.SYSTEM_MESSAGE, "Welcome to the Apples to Apples lobby!")
+		message = Message.encode(Message.GIVE_SESSION_ID, session_id)
 		self.server.sendMessageSingle(player.connection, message)
 
 	def playerLeaveLobby(self, connection):
@@ -23,4 +23,4 @@ class Lobby(object):
 
 	def processMessage(self, connection, encodedMessage):
 		message = Message.decode(encodedMessage)
-		print "Received message type {type} with payload {payload}".format(type=message['type'], payload=message['payload'])
+		# print "Received message type {type} with payload {payload}".format(type=message['type'], payload=message['payload'])

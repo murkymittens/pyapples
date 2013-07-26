@@ -8,7 +8,7 @@
       <form>
          <p>Broadcast Message: <input id="message" type="text" size="50" maxlength="50" value=""></p>
       </form>
-      <button onclick='send();'>Broadcast Message</button>
+      <button onclick='sendChat();'>Broadcast Message</button>
       <pre id="log" style="height: 20em; overflow-y: scroll; background-color: #faa;"></pre>
 
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
@@ -23,8 +23,7 @@
          $(function() {
             log = $("#log");
             messageBox = $("#message");
-            //connect(wsurl);
-            socket = new WebSocket(wsurl);
+            connect(wsurl);
             if(socket) {
                socket.onopen = onConnectionOpen
                socket.onclose = onConnectionClosed
@@ -36,15 +35,18 @@
             socket = new WebSocket(wsurl);
          }
 
-         function send() {
-            message = messageBox.val();
-            messageBox.val('');
+         function sendMessage(msgType, msgPayload) {
             if(socket) {
-               var json = {type: 1, payload: message}
+               var json = {type: msgType, payload: msgPayload};
                var encoded = $.toJSON(json);
-               alert(encoded);
                socket.send(encoded);
             }
+         }
+
+         function sendChat() {
+            message = messageBox.val();
+            messageBox.val('');
+            sendMessage('1', message);
          }
 
          function onMessageReceived(event) {
@@ -52,6 +54,10 @@
             switch(message.type) {
                case 0: // system message
                   appendChat(message.payload);
+                  break;
+               case 1: // receive session id
+                  sessionId = message.payload;
+                  alert("Received session id: " + sessionId);
                   break;
             }
          }
