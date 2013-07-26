@@ -50,8 +50,10 @@ def main():
 		host = "127.0.0.1"
 		port = sys.argv[1]
 
+	print "Starting server on {host}:{port}".format(host=host, port=port)
 	factory = Server("ws://{host}:{port}".format(host=host, port=port))
 	factory.protocol = ClientConnection
+	factory.setProtocolOptions(allowHixie76=True)
 	listenWS(factory, interface=host)
 	reactor.run()
 
