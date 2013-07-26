@@ -21,5 +21,6 @@ class Lobby(object):
 	def playerLeaveLobby(self, connection):
 		pass
 
-	def processMessage(self, connection, message):
-		pass
+	def processMessage(self, connection, encodedMessage):
+		message = Message.decode(encodedMessage)
+		print message

@@ -6,12 +6,12 @@
       <h1>Autobahn WebSocket Broadcast Demo</h1>
       <noscript>You must enable JavaScript</noscript>
       <form>
-         <p>Broadcast Message: <input id="message" type="text" size="50" maxlength="50" value="Hello from Browser!"></p>
+         <p>Broadcast Message: <input id="message" type="text" size="50" maxlength="50" value=""></p>
       </form>
-      <button onclick='broadcast();'>Broadcast Message</button>
+      <button onclick='send();'>Broadcast Message</button>
       <pre id="log" style="height: 20em; overflow-y: scroll; background-color: #faa;"></pre>
 
-      <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
       <script type="text/javascript" src="jquery.json-2.4.min.js"></script>
       <script type="text/javascript">
          var socket = null;
@@ -23,7 +23,8 @@
          $(function() {
             log = $("#log");
             messageBox = $("#message");
-            connect(wsurl);
+            //connect(wsurl);
+            socket = new WebSocket(wsurl);
             if(socket) {
                socket.onopen = onConnectionOpen
                socket.onclose = onConnectionClosed
@@ -66,7 +67,7 @@
 
          function appendChat(message) {
             log.append("<div>" + message + "</div>");
-            log.scrollTop(log.scrollHeight())
+            log.scrollTop(log.scrollHeight)
          }
       </script>
    </body>
