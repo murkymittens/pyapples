@@ -37,13 +37,12 @@
          }
 
          function send() {
-            message = messageBox.value();
-            messageBox.value('');
+            message = messageBox.val();
+            messageBox.val('');
             if(socket) {
-               json = new Array();
-               json['type'] = 1;
-               json['payload'] = message;
+               var json = {type: 1, payload: message}
                var encoded = $.toJSON(json);
+               alert(encoded);
                socket.send(encoded);
             }
          }
