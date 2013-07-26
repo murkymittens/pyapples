@@ -18,5 +18,8 @@ class Lobby(object):
 		message = Message.encode(Message.SYSTEM_MESSAGE, "Welcome to the Apples to Apples lobby!")
 		self.server.sendMessageSingle(player.connection, message)
 
+	def playerLeaveLobby(self, connection):
+		pass
+
 	def processMessage(self, connection, message):
 		pass

@@ -32,11 +32,13 @@ class Server(WebSocketServerFactory):
 		if not client in self.clients:
 			self.clients.append(client)
 			print "Client {client} connected".format(client=client.peerstr)
+			self.gameLobby.playerJoinLobby(client)
 
 	def unregister(self, client):
 		if client in self.clients:
 			self.clients.remove(client)
 			print "Client {client} disconnected".format(client=client.peerstr)
+			self.gameLobby.playerLeaveLobby(client)
 
 	def sendMessageSingle(self, client, message):
 		client.sendMessage(message)
