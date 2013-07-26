@@ -6,3 +6,5 @@ class Player(object):
 		self.green_apples = []
 		self.game = None
 		self.connection = connection
+		self.connection.player = self
+		self.active_red_apple = None

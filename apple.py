@@ -6,3 +6,6 @@ class Apple(object):
 		self.type = type
 		self.word = word
 		self.flavour = flavour
+		self.dictionary = {}
+		self.dictionary['word'] = self.word
+		self.dictionary['flavour'] = self.flavour

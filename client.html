@@ -53,25 +53,27 @@
             var message = $.parseJSON(event.data);
             switch(message.type) {
                case 0: // system message
-                  appendChat(message.payload);
+                  appendChat('SYSTEM', message.payload);
                   break;
                case 1: // receive session id
                   sessionId = message.payload;
-                  alert("Received session id: " + sessionId);
+                  break;
+               default:
+                  appendChat('GAME', message.payload);
                   break;
             }
          }
 
          function onConnectionOpen() {
-            appendChat("Connected to server");
+            appendChat('LOCAL', "Connected to server");
          }
 
          function onConnectionClosed(event) {
-            appendChat("Disconnected from server");
+            appendChat('LOCAL', "Disconnected from server");
          }
 
-         function appendChat(message) {
-            log.append("<div>" + message + "</div>");
+         function appendChat(user, message) {
+            log.append("<div><b>" + user + ":</b> " + message + "</div>");
             log.scrollTop(log.scrollHeight)
          }
       </script>

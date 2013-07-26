@@ -46,7 +46,7 @@ class Server(WebSocketServerFactory):
 	def sendMessageMultiple(self, clients, message):
 		preparedMessage = self.prepareMessage(message)
 		for client in clients:
-			client.sendMessage(preparedMessage)
+			client.sendPreparedMessage(preparedMessage)
 
 def main():
 	if len(sys.argv) > 2:
