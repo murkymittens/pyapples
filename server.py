@@ -54,8 +54,8 @@ def main():
 	factory = Server("ws://{host}:{port}".format(host=host, port=port))
 	factory.protocol = ClientConnection
 	factory.setProtocolOptions(allowHixie76=True)
-	# listenWS(factory, interface=host)
-	listenWS(factory)
+	listenWS(factory, interface=host)
+	# listenWS(factory)
 	reactor.run()
 
 
