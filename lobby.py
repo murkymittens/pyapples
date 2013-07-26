@@ -23,4 +23,4 @@ class Lobby(object):
 
 	def processMessage(self, connection, encodedMessage):
 		message = Message.decode(encodedMessage)
-		print "Received message type {type} with payload {payload}".format(type=message.type, payload=message.payload)
+		print "Received message type {type} with payload {payload}".format(type=message['type'], payload=message['payload'])
