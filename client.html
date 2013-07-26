@@ -1,64 +1,6 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <script type="text/javascript">
-         var sock = null;
-         var ellog = null;
-
-         window.onload = function() {
-
-            var wsuri;
-            var port = 8888;
-            ellog = document.getElementById('log');
-
-            if (window.location.protocol === "file:") {
-               wsuri = "ws://localhost:" + port;
-            } else {
-               wsuri = "ws://" + window.location.hostname + ":" + port;
-            }
-
-            if ("WebSocket" in window) {
-               log("WebSocket found")
-               sock = new WebSocket(wsuri);
-            } else if ("MozWebSocket" in window) {
-               log("MozWebSocket found")
-               sock = new MozWebSocket(wsuri);
-            } else {
-               log("Browser does not support WebSocket!");
-               window.location = "http://autobahn.ws/unsupportedbrowser";
-            }
-
-            if (sock) {
-               sock.onopen = function() {
-                  log("Connected to " + wsuri);
-               }
-
-               sock.onclose = function(e) {
-                  log("Connection closed (wasClean = " + e.wasClean + ", code = " + e.code + ", reason = '" + e.reason + "')");
-                  sock = null;
-               }
-
-               sock.onmessage = function(e) {
-                  log("Got echo: " + e.data);
-               }
-            }
-         };
-
-         function broadcast() {
-            var msg = document.getElementById('message').value;
-            if (sock) {
-               sock.send(msg);
-               log("Sent: " + msg);
-            } else {
-               log("Not connected.");
-            }
-         };
-
-         function log(m) {
-            ellog.innerHTML += m + '\n';
-            ellog.scrollTop = ellog.scrollHeight;
-         };
-      </script>
    </head>
    <body>
       <h1>Autobahn WebSocket Broadcast Demo</h1>
@@ -68,5 +10,64 @@
       </form>
       <button onclick='broadcast();'>Broadcast Message</button>
       <pre id="log" style="height: 20em; overflow-y: scroll; background-color: #faa;"></pre>
+
+      <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+      <script type="text/javascript" src="jquery.json-2.4.min.js"></script>
+      <script type="text/javascript">
+         var socket = null;
+         var log = null;
+         var messageBox = null;
+         var wsurl = "ws://localhost:8888";
+         var sessionId = null;
+
+         $(function() {
+            log = $("#log");
+            messageBox = $("#message");
+            connect(wsurl);
+            if(socket) {
+               socket.onopen = onConnectionOpen
+               socket.onclose = onConnectionClosed
+               socket.onmessage = onMessageReceived
+            }
+         })
+
+         function connect(wsurl) {
+            socket = new WebSocket(wsurl);
+         }
+
+         function send() {
+            message = messageBox.value();
+            messageBox.value('');
+            if(socket) {
+               json = new Array();
+               json['type'] = 1;
+               json['payload'] = message;
+               var encoded = $.toJSON(json);
+               socket.send(encoded);
+            }
+         }
+
+         function onMessageReceived(event) {
+            var message = $.parseJSON(event.data);
+            switch(message.type) {
+               case 0: // system message
+                  appendChat(message.payload);
+                  break;
+            }
+         }
+
+         function onConnectionOpen() {
+            appendChat("Connected to server");
+         }
+
+         function onConnectionClosed(event) {
+            appendChat("Disconnected from server");
+         }
+
+         function appendChat(message) {
+            log.append("<div>" + message + "</div>");
+            log.scrollTop(log.scrollHeight())
+         }
+      </script>
    </body>
 </html>
