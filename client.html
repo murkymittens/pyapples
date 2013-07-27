@@ -46,7 +46,28 @@
          function sendChat() {
             message = messageBox.val();
             messageBox.val('');
-            sendMessage('1', message);
+            //sendMessage('1', message);
+            command = message.split(" ");
+            switch(command[0]) {
+               case 'create_game':
+                  sendMessage(3, command[1]);
+                  break;
+               case 'join_game':
+                  sendMessage(7, command[1]);
+                  break;
+               case 'start_round':
+                  sendMessage(14, '');
+                  break;
+               case 'red':
+                  sendMessage(15, command[1]);
+                  break;
+               case 'winner':
+                  sendMessage(16, command[1]);
+                  break;
+               case 'name':
+                  sendMessage(6, command[1]);
+                  break;
+            }
          }
 
          function onMessageReceived(event) {
@@ -57,6 +78,7 @@
                   break;
                case 1: // receive session id
                   sessionId = message.payload;
+                  appendChat('SYSTEM', "Got session id: " + sessionId);
                   break;
                default:
                   appendChat('GAME', message.payload);

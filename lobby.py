@@ -40,7 +40,7 @@ class Lobby(object):
 
 	def processMessage(self, connection, encodedMessage):
 		message = Message.decode(encodedMessage)
-		self.message_handlers[message['type']](connection, message['payload'])
+		self.message_handlers[message['type']](connection, *message['payload'])
 
 	def requestSessionId(self, connection, player_name):
 		session_id = uuid4().hex
