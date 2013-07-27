@@ -29,7 +29,7 @@ class Game(object):
 		for player in self.players:
 			deficit = cards_per_player - len(player.red_apples)
 			if deficit > 0:
-				for i in xrange(1, deficit):
+				for i in xrange(0, deficit):
 					player.red_apples.append(self.red_apples.pop())
 
 	def drawGreenCard(self):
