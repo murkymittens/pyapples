@@ -135,6 +135,7 @@ class Lobby(object):
 	def selectWinningRedApple(self, connection, player_id):
 		judge = connection.player
 		game = judge.game
+		player_id = int(player_id)
 		winner = game.players[player_id]
 
 		if game.state == Game.STATE_JUDGING:

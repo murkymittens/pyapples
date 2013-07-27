@@ -81,7 +81,8 @@
                   appendChat('SYSTEM', "Got session id: " + sessionId);
                   break;
                default:
-                  appendChat('GAME', message.payload);
+                  //appendChat('GAME', message.payload);
+                  console.log("object %o", message.payload);
                   break;
             }
          }
