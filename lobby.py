@@ -40,7 +40,7 @@ class Lobby(object):
 
 	def processMessage(self, connection, encodedMessage):
 		message = Message.decode(encodedMessage)
-		self.message_handlers[message['type']](connection, *message['payload'])
+		self.message_handlers[message['type']](connection, message['payload'])
 
 	def requestSessionId(self, connection, player_name):
 		session_id = uuid4().hex
@@ -83,7 +83,7 @@ class Lobby(object):
 			message = Message.encode(Message.SEND_PLAYER_JOIN_GAME_FAILURE, "Game does not exist...")
 		self.server.sendMessageSingle(connection, message)
 
-	def startRound(self, connection):
+	def startRound(self, connection, *args):
 		game = connection.player.game
 		if game.state != Game.STATE_FINISHED_ROUND:
 			return
