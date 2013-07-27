@@ -106,7 +106,7 @@ class Lobby(object):
 			self.server.sendMessageSingle(player.connection, message)
 
 		round_details = {}
-		round_details['JUDGE'] = game.players[game.judge]
+		round_details['JUDGE'] = game.players[game.judge].name
 		round_details['SCORES'] = scores
 		message = Message.encode(Message.SEND_GAME_MESSAGE_ROUND_DETAILS, round_details)
 		self.server.sendMessageMultiple(connections, message)
