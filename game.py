@@ -19,6 +19,8 @@ class Game(object):
 		shuffle(self.red_apples)
 		shuffle(self.green_apples)
 
+		print "Game created with {rap} red apples and {gap} green apples".format(rap=len(self.red_apples), gap=len(self.green_apples))
+
 	def start(self):
 		self.in_progress = True
 
