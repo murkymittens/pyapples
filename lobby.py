@@ -45,8 +45,8 @@ class Lobby(object):
 	def purgeInactiveGames(self):
 		games_to_purge = [x for x in self.games if not self.isGameActive(x)]
 		for game in games_to_purge:
-			print "Removing {game} for no players.".format(game=game.name)
-			del self.games[game.name]
+			print "Removing {game} for no players.".format(game=game)
+			del self.games[game]
 
 	def isGameActive(self, game):
 		return len(self.games[game].players) > 0
