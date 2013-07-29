@@ -23,8 +23,6 @@ class Server(WebSocketServerFactory):
 		WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
 		self.clients = []
 		self.gameLobby = None
-		t = task.LoopingCall(self.purge)
-		t.start(60.0)
 
 	def processMessage(self, client, message):
 		# print "Received message from {client}: {message}".format(client=client.peerstr, message=message)
@@ -70,6 +68,9 @@ def main():
 
 	lobby = Lobby(factory)
 	factory.gameLobby = lobby
+
+	t = task.LoopingCall(factory.purge)
+	t.start(60.0)
 
 	listenWS(factory, interface=host)
 	reactor.run()
