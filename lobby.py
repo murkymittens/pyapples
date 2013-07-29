@@ -1,3 +1,4 @@
+import sqlite3
 from uuid import uuid4
 
 from player import Player
@@ -19,18 +20,19 @@ class Lobby(object):
 				Message.RECEIVE_PLAYER_USE_RED_APPLE: self.useRedApple,
 				Message.RECEIVE_PLAYER_SELECT_WINNER: self.selectWinningRedApple
 		}
-		self.red_apples = [
-				Apple(Apple.TYPE_RED, "Bob Marley"),
-				Apple(Apple.TYPE_RED, "The Wild West"),
-				Apple(Apple.TYPE_RED, "Mariska Hargitay"),
-				Apple(Apple.TYPE_RED, "Walk on the Beach"),
-				Apple(Apple.TYPE_RED, "Incestuous Affair"),
-				Apple(Apple.TYPE_RED, "Flaming Homosexual")
-		]
-		self.green_apples = [
-				Apple(Apple.TYPE_GREEN, "Fabulous"),
-				Apple(Apple.TYPE_GREEN, "Deviant")
-		]
+		self.red_apples = []
+		self.green_apples = []
+
+		sql = sqlite3.connect("apples.db")
+		cur = sql.cursor()
+
+		for row in cur.execute("SELECT * FROM green_apples"):
+			self.green_apples.append(Apple(Apple.TYPE_GREEN, row[0], row[1]))
+		
+		for row in cur.execute("SELECT * FROM red_apples"):
+			self.red_apples.append(Apple(Apple.TYPE_RED, row[0], row[1]))
+
+		sql.close()
 
 	def playerJoinLobby(self, connection):
 		pass
