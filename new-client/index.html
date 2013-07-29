@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Apples to Apples Online</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="apples.css">
+	</head>
+	<body>
+		<div class="container">
+			<div class="vspacer-2"></div>
+			<div class="row">
+				<div class="col-lg-4">
+					<form id="chat_form" action="#">
+						<div class="row">
+							<div class="col-12">
+								<div class="input-group" id="chat_input_group">
+									<span class="input-group-btn">
+										<button class="btn btn-default" onclick="start_round(); return false;">Start</button>
+									</span>
+									<input type="text" name="chat_line" id="chat_input" class="form-control" placeholder="Type what you want to say here...">
+									<span class="input-group-btn">
+										<button class="btn btn-default" onclick="submit_chat(); return false;">Say</button>
+									</span>
+								</div>
+								<div class="input-group" id="name_input_group">
+									<input type="text" name="name_line" id="name_input" class="form-control" placeholder="What is your name?">
+									<span class="input-group-btn">
+										<button class="btn btn-default" onclick="submit_name(); return false;">That's my name!</button>
+									</span>
+								</div>
+								<div class="input-group" id="game_input_group">
+									<input type="text" name="game_line" id="game_input" class="form-control" placeholder="Enter game name here...">
+									<span class="input-group-btn">
+										<button class="btn btn-default" onclick="submit_game(); return false;">Join/Create Game</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</form>
+					<div class="vspacer-2"></div>
+					<div id="chat">
+						<div id="chat_message_template" class="hidden"><span class="chat-message-author font-bold"></span>:<span class="chat-message-body"></span></div>
+					</div>
+					<div class="vspacer-2"></div>
+				</div>
+	
+				<div class="col-lg-4">
+					<div class="list-group" id="player-cards">
+						<div class="list-group-item green-apple">
+							<div class="media">
+								<div id="judge-name" class="pull-right img-thumbnail font-bold">Adria</div>
+								<img class="pull-right img-thumbnail" src="green-apple.png">
+								<div class="media-body">
+									<h4 id="green-card-word" class="media-heading">Absurd</h4>
+									<i id="green-card-synonyms">(ridiculous, senseless, foolish)</i>
+								</div>
+							</div>
+						</div>
+						<a id="red-apple-template" href="#" class="list-group-item red-apple hidden">
+							<div class="media">
+								<img class="pull-left img-thumbnail" src="red-apple.png">
+								<div class="media-body">
+									<h4 class="media-heading">A Bad Haircut</h4>
+									<div class="text-right">The perfect start to a bad hair day.</div>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="vspacer-2"></div>
+				</div>
+
+				<div class="col-lg-4">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Score</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Lev</td>
+								<td>6</td>
+							</tr>
+							<tr>
+								<td>Jenny</td>
+								<td>9</td>
+							</tr>
+							<tr>
+								<td>Adria</td>
+								<td>3</td>
+							</tr>
+							<tr>
+								<td>Tyler</td>
+								<td>8</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="jquery.json-2.4.min.js"></script>
+		<script type="text/javascript" src="apples.js"></script>
+	</body>
+</html>

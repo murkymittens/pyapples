@@ -1,0 +1,37 @@
+.media img {
+	height: 48px;
+}
+
+#chat {
+	height: 8em;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+#chat div {
+	line-height: 1em;
+}
+
+.red-apple {
+	/*background-color: #fee;*/
+}
+
+.green-apple {
+	background-color: #efe;
+}
+
+.list-group a {
+	color: #000;
+}
+
+.vspacer-2 {
+	height: 2em;
+}
+
+.hidden {
+	display: none;
+}
+
+.font-bold {
+	font-weight: bold;
+}

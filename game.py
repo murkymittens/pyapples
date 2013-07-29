@@ -7,14 +7,14 @@ class Game(object):
 
 	def __init__(self, name, red_apples, green_apples):
 		self.name = name
-		self.red_apples = red_apples[:]
-		self.green_apples = green_apples[:]
+		self.red_apples = list(red_apples)
+		self.green_apples = list(green_apples)
 		self.active_green_apple = None
 		self.players = []
 		self.master = None
 		self.judge = 0
 		self.in_progress = False
-		self.state = 2
+		self.state = Game.STATE_FINISHED_ROUND
 
 		shuffle(self.red_apples)
 		shuffle(self.green_apples)
@@ -25,7 +25,7 @@ class Game(object):
 		self.in_progress = True
 
 	def dealCards(self):
-		cards_per_player = 1
+		cards_per_player = 2
 		for player in self.players:
 			deficit = cards_per_player - len(player.red_apples)
 			if deficit > 0:
