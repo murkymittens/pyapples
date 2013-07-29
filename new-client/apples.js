@@ -85,10 +85,10 @@ function onMessageReceived(event) {
 			for(var card_index in message.payload) {
 				//make_red_card(message.payload[card_index].word, message.payload[card_index].flavour, card_index);
 				card = new Array();
-				card[] = message.payload[card_index].word;
-				card[] = message.payload[card_index].flavour;
-				card[] = card_index;
-				cards[] = card;
+				card.push(message.payload[card_index].word);
+				card.push(message.payload[card_index].flavour);
+				card.push(card_index);
+				cards.push(card);
 			}
 			shuffle(cards);
 			for(var card in cards) {
