@@ -121,12 +121,15 @@ function sendMessage(messageType, messagePayload) {
 }
 
 function play_red_card(element) {
-	var red_card_index = $(element).attr('data-card-index');
-	//alert("Red card index: " + red_card_index);
+	var card = $(element);
+	var red_card_index = card.attr('data-card-index');
+	
 	if(current_round_judge == my_name) {
 		var type = 16;
 	} else {
 		var type = 15;
+		player_cards.find(".active-red-apple").removeClass('active-red-apple');
+		card.addClass('active-red-apple');
 	}
 	sendMessage(type, red_card_index);
 }
