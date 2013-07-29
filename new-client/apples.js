@@ -69,15 +69,23 @@ function onMessageReceived(event) {
 			console.log("red apples: %o", message.payload);
 			clear_red_cards();
 			for(var i=0; i<message.payload.length; i++) {
-				make_red_card(message.payload[i].word, message.payload[i].flavour);
+				make_red_card(message.payload[i].word, message.payload[i].flavour, i);
 			}
 			break;
 		case 11: // round details
 			append_chat("GAME", "Got round details");
 			console.log("round details: %o", message.payload);
 			judge_name.html(message.payload.JUDGE);
+			current_round_judge = message.payload.JUDGE;
 			green_card_word.html(message.payload.GREEN_APPLE.word);
 			green_card_synonyms.html(message.payload.GREEN_APPLE.flavour);
+			break;
+		case 13: // red cards to judge
+			append_chat("GAME", "Got apples to judge");
+			clear_red_cards();
+			for(var card_index in message.payload) {
+				make_red_card(message.payload[card_index].word, message.payload[card_index].flavour, card_index);
+			}
 			break;
 		default:
 			console.log("type: %d\ndata: %o", message.type, message.payload);
@@ -105,7 +113,8 @@ function sendMessage(messageType, messagePayload) {
 }
 
 function play_red_card(element) {
-	var red_card_index = $("#player-cards").index(element);
+	var red_card_index = $(element).attr('data-card-index');
+	//alert("Red card index: " + red_card_index);
 	if(current_round_judge == my_name) {
 		var type = 16;
 	} else {
@@ -144,14 +153,15 @@ function append_chat(prefix, message) {
 }
 
 function clear_red_cards() {
-	player_cards.remove(".red-apple[id!='red-apple-template']");
+	player_cards.find(".red-apple[id!='red-apple-template']").remove();
 }
 
-function make_red_card(word, flavour) {
+function make_red_card(word, flavour, index) {
 	var card = red_card_template.clone();
 	card.removeAttr('id');
 	card.removeClass('hidden');
-	card.children("h4").html(word);
-	card.children(".text-right").html(flavour);
+	card.attr('data-card-index', index);
+	card.find(".media-heading").eq(0).html(word);
+	card.find(".text-right").eq(0).html(flavour);
 	player_cards.append(card);
 }
