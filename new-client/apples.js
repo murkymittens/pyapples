@@ -65,26 +65,34 @@ function onMessageReceived(event) {
 			sendMessage(3, game_name);
 			break;
 		case 12: // player's red apple cards
-			append_chat("GAME", "Got my red apples: " + message.payload.length);
-			console.log("red apples: %o", message.payload);
 			clear_red_cards();
 			for(var i=0; i<message.payload.length; i++) {
 				make_red_card(message.payload[i].word, message.payload[i].flavour, i);
 			}
 			break;
 		case 11: // round details
-			append_chat("GAME", "Got round details");
-			console.log("round details: %o", message.payload);
 			judge_name.html(message.payload.JUDGE);
 			current_round_judge = message.payload.JUDGE;
 			green_card_word.html(message.payload.GREEN_APPLE.word);
 			green_card_synonyms.html(message.payload.GREEN_APPLE.flavour);
+			if(my_name == current_round_judge) {
+				clear_red_cards();
+			}
 			break;
 		case 13: // red cards to judge
-			append_chat("GAME", "Got apples to judge");
 			clear_red_cards();
+			cards = new Array();
 			for(var card_index in message.payload) {
-				make_red_card(message.payload[card_index].word, message.payload[card_index].flavour, card_index);
+				//make_red_card(message.payload[card_index].word, message.payload[card_index].flavour, card_index);
+				card = new Array();
+				card[] = message.payload[card_index].word;
+				card[] = message.payload[card_index].flavour;
+				card[] = card_index;
+				cards[] = card;
+			}
+			shuffle(cards);
+			for(var card in cards) {
+				make_red_card(card[0], card[1], card[2]);
 			}
 			break;
 		default:
@@ -164,4 +172,21 @@ function make_red_card(word, flavour, index) {
 	card.find(".media-heading").eq(0).html(word);
 	card.find(".text-right").eq(0).html(flavour);
 	player_cards.append(card);
+}
+
+function shuffle(array) {
+    var counter = array.length, temp, index;
+
+    // While there are elements in the array
+    while (counter--) {
+        // Pick a random index
+        index = (Math.random() * counter) | 0;
+
+        // And swap the last element with it
+        temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+
+    return array;
 }
