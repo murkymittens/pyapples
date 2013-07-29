@@ -1,7 +1,7 @@
 import sys
 
 from autobahn.websocket import WebSocketServerProtocol, WebSocketServerFactory, listenWS
-from twisted.internet import reactor
+from twisted.internet import reactor, task
 
 from lobby import Lobby
 
@@ -23,6 +23,8 @@ class Server(WebSocketServerFactory):
 		WebSocketServerFactory.__init__(self, url, debug = debug, debugCodePaths = debugCodePaths)
 		self.clients = []
 		self.gameLobby = None
+		t = task.LoopingCall(self.purge)
+		t.start(60.0)
 
 	def processMessage(self, client, message):
 		# print "Received message from {client}: {message}".format(client=client.peerstr, message=message)
@@ -41,12 +43,17 @@ class Server(WebSocketServerFactory):
 			self.gameLobby.playerLeaveLobby(client)
 
 	def sendMessageSingle(self, client, message):
-		client.sendMessage(message)
+		if client is not None:
+			client.sendMessage(message)
 
 	def sendMessageMultiple(self, clients, message):
 		preparedMessage = self.prepareMessage(message)
 		for client in clients:
-			client.sendPreparedMessage(preparedMessage)
+			if client is not None:
+				client.sendPreparedMessage(preparedMessage)
+
+	def purge(self):
+		self.gameLobby.purge()
 
 def main():
 	if len(sys.argv) > 2:

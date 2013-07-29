@@ -8,3 +8,4 @@ class Player(object):
 		self.connection = connection
 		self.connection.player = self
 		self.active_red_apple = None
+		self.inactive_since = None

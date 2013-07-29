@@ -1,5 +1,6 @@
 import sqlite3
 from uuid import uuid4
+from time import time
 
 from player import Player
 from message import Message
@@ -22,6 +23,7 @@ class Lobby(object):
 		}
 		self.red_apples = []
 		self.green_apples = []
+		self.inactive_players = []
 
 		sql = sqlite3.connect("apples.db")
 		cur = sql.cursor()
@@ -34,11 +36,37 @@ class Lobby(object):
 
 		sql.close()
 
+	def purge(self):
+		self.purgeInactivePlayers()
+		self.purgeInactiveGames()
+
+	def purgeInactiveGames(self):
+		games_to_purge = [x for x in self.games if not self.isGameActive(x)]
+		for game in games_to_purge:
+			self.games.remove(game)
+
+	def isGameActive(self, game):
+		return len(self.games[game].players) > 0
+
+	def purgeInactivePlayers(self):
+		players_to_purge = [x for x in self.inactive_players if not self.isPlayerActive(x)]
+		for player in players_to_purge:
+			self.players.remove(self.inactive_players[player].session_id)
+			if self.inactive_players[player].game is not None:
+				self.inactive_players[player].game.players.remove(self.inactive_players[player])
+				self.inactive_players[player].game.startNewRound()
+
+	def isPlayerActive(self, player):
+		return time() - self.inactive_players[player].inactive_since < 300
+
 	def playerJoinLobby(self, connection):
 		pass
 
 	def playerLeaveLobby(self, connection):
-		pass
+		self.inactive_players.append(connection.player)
+		connection.player.inactive_since = time()
+		connection.player.connection = None
+		connection.player = None
 
 	def processMessage(self, connection, encodedMessage):
 		message = Message.decode(encodedMessage)
