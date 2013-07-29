@@ -16,6 +16,7 @@ var player_cards = null;
 var judge_name = null;
 var green_card_word = null;
 var green_card_synonyms = null;
+var scores_table = null;
 
 $(function() {
 	chat = $("#chat");
@@ -30,6 +31,7 @@ $(function() {
 	judge_name = $("#judge-name");
 	green_card_word = $("#green-card-word");
 	green_card_synonyms = $("#green-card-synonyms");
+	scores_table = $("#scores-table");
 
 	game_input_group.hide();
 	chat_input_group.hide();
@@ -78,6 +80,7 @@ function onMessageReceived(event) {
 			if(my_name == current_round_judge) {
 				clear_red_cards();
 			}
+			update_scores(message.payload.SCORES);
 			break;
 		case 13: // red cards to judge
 			clear_red_cards();
@@ -111,7 +114,7 @@ function onConnectionClosed(event) {
 
 function sendMessage(messageType, messagePayload) {
 	if(socket) {
-		append_chat("LOCAL", "Sending: " + messageType);
+		//append_chat("LOCAL", "Sending: " + messageType);
 		var json = {type: messageType, payload: messagePayload};
 		var encoded = $.toJSON(json);
 		socket.send(encoded);
@@ -175,6 +178,14 @@ function make_red_card(word, flavour, index) {
 	card.find(".media-heading").eq(0).html(word);
 	card.find(".text-right").eq(0).html(flavour);
 	player_cards.append(card);
+}
+
+function update_scores(scores) {
+	scores_table.empty();
+	for(var name in scores) {
+		var s = $("<tr><td>" + name + "</td><td>" + scores[name] + "</td></tr>");
+		scores_table.append(s);
+	}
 }
 
 function shuffle(array) {
