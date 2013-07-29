@@ -1,5 +1,6 @@
 var socket = null;
 var chat = null;
+//var wsurl = "ws://apples-diryprinter.rhcloud.com:8000";
 var wsurl = "ws://localhost:8888";
 var session_id = null;
 var game_input_group = null;
@@ -98,6 +99,12 @@ function onMessageReceived(event) {
 				make_red_card(cards[i]['word'], cards[i]['flavour'], cards[i]['index']);
 			}
 			break;
+		case 18: // receive chat message
+			append_chat(message.payload.name, message.payload.msg);
+			break;
+		case 19: // receive player join notification
+			append_chat("GAME", message.payload + " has joined the game.");
+			break;
 		default:
 			console.log("type: %d\ndata: %o", message.type, message.payload);
 			break;
@@ -158,7 +165,7 @@ function submit_game() {
 function submit_chat() {
 	var chat = chat_input.val();
 	chat_input.val("");
-	chat_input_group
+	sendMessage(17, chat);
 }
 
 function append_chat(prefix, message) {

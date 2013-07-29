@@ -6,6 +6,7 @@ from player import Player
 from message import Message
 from game import Game
 from apple import Apple
+from card_scraper import strip_tags
 
 class Lobby(object):
 	def __init__(self, server):
@@ -19,7 +20,8 @@ class Lobby(object):
 				Message.RECEIVE_PLAYER_JOIN_GAME: self.joinGame,
 				Message.RECEIVE_GAME_START: self.startRound,
 				Message.RECEIVE_PLAYER_USE_RED_APPLE: self.useRedApple,
-				Message.RECEIVE_PLAYER_SELECT_WINNER: self.selectWinningRedApple
+				Message.RECEIVE_PLAYER_SELECT_WINNER: self.selectWinningRedApple,
+				Message.RECEIVE_CHAT_MESSAGE: self.receiveChatMessage
 		}
 		self.red_apples = []
 		self.green_apples = []
@@ -104,6 +106,12 @@ class Lobby(object):
 		if game_name in self.games:
 			game = self.games[game_name]
 			if not game.in_progress:
+				connections = []
+				for player in game.players:
+					connections.append(player.connection)
+				message = Message.encode(Message.SEND_PLAYER_JOINED_NOTIFICATION, connection.player.name)
+				self.server.sendMessageMultiple(connections, message)
+
 				game.players.append(connection.player)
 				connection.player.game = game
 				message = Message.encode(Message.SEND_PLAYER_JOIN_GAME_SUCCESS, game_name)
@@ -176,3 +184,14 @@ class Lobby(object):
 					game.active_green_apple = None
 					game.state = Game.STATE_FINISHED_ROUND
 					self.startRound(connection)
+
+	def receiveChatMessage(self, connection, message):
+		connections = []
+		chat_message = {}
+		chat_message['name'] = connection.player.name
+		chat_message['msg'] = strip_tags(message)
+		game = connection.player.game
+		for player in game.players:
+			connections.append(player.connection)
+		encmessage = Message.encode(Message.SEND_CHAT_MESSAGE, chat_message)
+		self.server.sendMessageMultiple(connections, encmessage)
