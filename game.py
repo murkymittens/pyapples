@@ -25,7 +25,7 @@ class Game(object):
 		self.in_progress = True
 
 	def dealCards(self):
-		cards_per_player = 2
+		cards_per_player = 6
 		for player in self.players:
 			deficit = cards_per_player - len(player.red_apples)
 			if deficit > 0:
