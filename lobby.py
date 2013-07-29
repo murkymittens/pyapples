@@ -46,7 +46,7 @@ class Lobby(object):
 		games_to_purge = [x for x in self.games if not self.isGameActive(x)]
 		for game in games_to_purge:
 			print "Removing {game} for no players.".format(game=game.name)
-			self.games.remove(game)
+			del self.games[game.name]
 
 	def isGameActive(self, game):
 		return len(self.games[game].players) > 0
@@ -55,7 +55,7 @@ class Lobby(object):
 		players_to_purge = [x for x in self.inactive_players if not self.isPlayerActive(x)]
 		for player in players_to_purge:
 			print "Removing {player} for inactivity.".format(player=player.name)
-			self.players.remove(player.session_id)
+			del self.players[player.session_id]
 			if player.game is not None:
 				player.game.players.remove(player)
 				player.game.startNewRound()
