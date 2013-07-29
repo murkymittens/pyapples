@@ -91,8 +91,8 @@ function onMessageReceived(event) {
 				cards.push(card);
 			}
 			shuffle(cards);
-			for(var card in cards) {
-				make_red_card(card['word'], card['flavour'], card['index']);
+			for(var i=0; i<cards.length; i++) {
+				make_red_card(cards[i]['word'], cards[i]['flavour'], cards[i]['index']);
 			}
 			break;
 		default:
